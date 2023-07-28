@@ -1,19 +1,19 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import { Item } from "../types";
+import { ItemsContext, ItemsReducerDispatchContext } from "../store/ItemContext";
 
-export type ItemInputProps = {
-  addItem: (item: Item) => void
-  maxId: number
-}
 
-export function ItemInput({ addItem, maxId }: ItemInputProps) {
+export function ItemInput() {
   const [text, setText] = useState("");
+  const dispatch = useContext(ItemsReducerDispatchContext);
+  const items = useContext(ItemsContext);
+  const maxId = Math.max(...[0, ...items.map(i => i.id)]);
   const onTextChange: React.ChangeEventHandler<HTMLInputElement> = (event) => {
     setText(event.target.value);
   }
 
   const addItemhandler = () => {
-    addItem({ id: maxId + 1, message: text });
+    dispatch({ type: 'add', item: { id: maxId + 1, message: text } })
     setText("");
   }
 
@@ -27,12 +27,11 @@ export function ItemInput({ addItem, maxId }: ItemInputProps) {
 
 type ItemViewProps = {
   item: Item;
-  editItem: (item: Item) => void;
-  deleteItem: (itemId: number) => void;
 };
 
-function ItemView({ item: { id, message }, editItem, deleteItem }: ItemViewProps) {
+function ItemView({ item: { id, message } }: ItemViewProps) {
   const [isEditing, setIsEditing] = useState(false);
+  const dispatch = useContext(ItemsReducerDispatchContext);
   const [text, setText] = useState(message);
   const startEditing = () => {
     setIsEditing(true);
@@ -45,10 +44,12 @@ function ItemView({ item: { id, message }, editItem, deleteItem }: ItemViewProps
     setText(event.target.value)
   }
   const editItemHandler = () => {
-    editItem({ id, message: text });
+    dispatch({ type: 'edit', item: { id, message: text } })
     setIsEditing(false);
   }
-  const deleteItemHandler = ()=>{deleteItem(id)};
+  const deleteItemHandler = () => {
+    dispatch({ type: 'delete', itemId: id });
+  };
 
   const whenViewing = (
     <div>
@@ -65,21 +66,16 @@ function ItemView({ item: { id, message }, editItem, deleteItem }: ItemViewProps
       <br />
       <input type="text" value={text} onChange={textChangeHandler} />
       <button onClick={editItemHandler}>apply</button>
-      
+
       <button onClick={cancelEditing}>cancel</button>
     </div>
   )
   return isEditing ? whenEditing : whenViewing;
 }
 
-type ItemListProps = {
-  items: Item[]
-  editItem: (item: Item) => void
-  deleteItem: (itemId: number) => void;
-}
-
-export function ItemList(props: ItemListProps) {
-  const renderedItems = props.items.map(i => <ItemView item={i} editItem={props.editItem} deleteItem={props.deleteItem}/>)
+export function ItemList() {
+  const items = useContext(ItemsContext);
+  const renderedItems = items.map(i => <ItemView item={i} />)
   return (
     <div>
       {renderedItems}

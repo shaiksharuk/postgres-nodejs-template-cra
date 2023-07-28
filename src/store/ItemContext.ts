@@ -1,3 +1,4 @@
+import { createContext } from "react";
 import { Item } from "../types";
 
 type ItemReducerAction =
@@ -37,3 +38,6 @@ export const itemReducer = (items: Item[], action: ItemReducerAction) => {
       throw Error("Unknown action: " + action);
   }
 };
+
+export const ItemsContext = createContext<Item[]>([]);
+export const ItemsReducerDispatchContext = createContext<(action :ItemReducerAction) => void>(()=>{});
