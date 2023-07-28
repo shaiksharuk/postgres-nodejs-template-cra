@@ -10,10 +10,12 @@ export function ItemInput({ addItem, maxId }: ItemInputProps) {
   const onTextChange: React.ChangeEventHandler<HTMLInputElement> = (event) => {
     setText(event.target.value);
   }
+
   const addItemhandler = () => {
     addItem({ id: maxId + 1, message: text });
     setText("");
   }
+
   return (
     <div>
       <input type="text" value={text} onChange={onTextChange} />
@@ -21,7 +23,6 @@ export function ItemInput({ addItem, maxId }: ItemInputProps) {
     </div>
   )
 }
-
 
 export type Item = {
   id: number;
@@ -31,9 +32,10 @@ export type Item = {
 type ItemViewProps = {
   item: Item;
   editItem: (item: Item) => void;
+  deleteItem: (itemId: number) => void;
 };
 
-function ItemView({ item: { id, message }, editItem }: ItemViewProps) {
+function ItemView({ item: { id, message }, editItem, deleteItem }: ItemViewProps) {
   const [isEditing, setIsEditing] = useState(false);
   const [text, setText] = useState(message);
   const startEditing = () => {
@@ -50,12 +52,16 @@ function ItemView({ item: { id, message }, editItem }: ItemViewProps) {
     editItem({ id, message: text });
     setIsEditing(false);
   }
+  const itemId = id;
+  const deleteItemHandler = ()=>{deleteItem(itemId)};
+
   const whenViewing = (
     <div>
       id: {id}
       <br />
       message: {message}
       <button onClick={startEditing}>edit</button>
+      <button onClick={deleteItemHandler}>delete</button>
     </div>
   )
   const whenEditing = (
@@ -64,6 +70,7 @@ function ItemView({ item: { id, message }, editItem }: ItemViewProps) {
       <br />
       <input type="text" value={text} onChange={textChangeHandler} />
       <button onClick={editItemHandler}>apply</button>
+      
       <button onClick={cancelEditing}>cancel</button>
     </div>
   )
@@ -73,10 +80,11 @@ function ItemView({ item: { id, message }, editItem }: ItemViewProps) {
 type ItemListProps = {
   items: Item[]
   editItem: (item: Item) => void
+  deleteItem: (itemId: number) => void;
 }
 
 export function ItemList(props: ItemListProps) {
-  const renderedItems = props.items.map(i => <ItemView item={i} editItem={props.editItem}/>)
+  const renderedItems = props.items.map(i => <ItemView item={i} editItem={props.editItem} deleteItem={props.deleteItem}/>)
   return (
     <div>
       {renderedItems}

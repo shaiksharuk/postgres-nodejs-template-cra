@@ -1,7 +1,6 @@
 import { useState } from "react";
 import { Item, ItemInput, ItemList } from "./components/ItemList";
 
-
 function App() {
   const [items, setItems] = useState<Item[]>([]);
   const addItem = (item: Item) => {
@@ -20,11 +19,22 @@ function App() {
     }
     setItems(newItems);
   }
+
+  const deleteItem = (itemId:number) => {
+    
+    const filteredItems = items.filter((it) => {
+      return it.id != itemId;
+    })
+
+    setItems(filteredItems);
+
+  }
+
   return (
     <div className="App">
       <h1>Sharuk's App</h1>
       <ItemInput addItem={addItem} maxId={Math.max(...[0, ...items.map(i => i.id)])} />
-      <ItemList items={items} editItem={editItem}/>
+      <ItemList items={items} editItem={editItem} deleteItem = {deleteItem}/>
     </div>
   );
 }
