@@ -1,35 +1,19 @@
-import { useState } from "react";
-import { Item, ItemInput, ItemList } from "./components/ItemList";
+import { useReducer } from "react";
+import { ItemInput, ItemList } from "./components/ItemList";
+import { Item } from "./types";
+import { itemReducer } from "./store/ItemContext";
 
 function App() {
-  const [items, setItems] = useState<Item[]>([]);
+  const [items, dispatch] = useReducer(itemReducer, []);
   const addItem = (item: Item) => {
-    setItems([...items, item]);
+    dispatch({type: 'add', item})
   }
   const editItem = (item: Item) => {
-    const idx = items.findIndex((i) => i.id===item.id)
-    if (idx < 0) {
-      window.alert(`invlaid idx: ${idx}`);
-      return
-    }
-    const newItems = [...items];
-    newItems[idx] = {
-      id: item.id,
-      message: item.message,
-    }
-    setItems(newItems);
+    dispatch({type: 'edit', item})
   }
-
   const deleteItem = (itemId:number) => {
-    
-    const filteredItems = items.filter((it) => {
-      return it.id != itemId;
-    })
-
-    setItems(filteredItems);
-
+    dispatch({type: 'delete', itemId});
   }
-
   return (
     <div className="App">
       <h1>Sharuk's App</h1>

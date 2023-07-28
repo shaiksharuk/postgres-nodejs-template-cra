@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { Item } from "../types";
 
 export type ItemInputProps = {
   addItem: (item: Item) => void
@@ -24,11 +25,6 @@ export function ItemInput({ addItem, maxId }: ItemInputProps) {
   )
 }
 
-export type Item = {
-  id: number;
-  message: string;
-}
-
 type ItemViewProps = {
   item: Item;
   editItem: (item: Item) => void;
@@ -52,8 +48,7 @@ function ItemView({ item: { id, message }, editItem, deleteItem }: ItemViewProps
     editItem({ id, message: text });
     setIsEditing(false);
   }
-  const itemId = id;
-  const deleteItemHandler = ()=>{deleteItem(itemId)};
+  const deleteItemHandler = ()=>{deleteItem(id)};
 
   const whenViewing = (
     <div>
