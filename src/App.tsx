@@ -5,7 +5,7 @@ import { ItemsContext, ItemsReducerDispatchContext, itemReducer } from "./store/
 import { ListContext, TasksReducerDispatchContext, listReducer } from "./store/toDoContext";
 function App() {
   const [items, dispatch] = useReducer(itemReducer, []);
-  const [tasks, taskDispach] = useReducer(listReducer, [])
+  const [tasks, taskDispach] = useReducer(listReducer, []);
   return (
     <div className="App">
       <h1>Sharuk's Apps</h1>

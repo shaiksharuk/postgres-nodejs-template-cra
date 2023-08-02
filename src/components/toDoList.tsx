@@ -13,10 +13,14 @@ export function ListInput() {
   const addListHandler = () => {
     dispatch({ type: 'add', task: { id: maxId + 1, task:text, isDone: false } })
   }
+  const unCheckAllTasks =()=>{
+    dispatch({type: "unCheckAllTasks",})
+  }
   return (
     <div>
       <input type="type" value={text} onChange={onTextChange} />
       <button onClick={addListHandler}>add</button>
+      <button onClick={unCheckAllTasks}>clear</button>
     </div>
   )
 }
@@ -25,7 +29,7 @@ type ListViewProps = {
 };
 
 function ListView({ task: { id, task,isDone } }: ListViewProps) {
-  
+
   const dispatch = useContext(TasksReducerDispatchContext);
   const chekBoxHandler:React.ChangeEventHandler<HTMLInputElement> = (event)=> {
     dispatch({type: "toggledone", taskId: id})
@@ -36,7 +40,7 @@ function ListView({ task: { id, task,isDone } }: ListViewProps) {
       id: {id}
       <br/>
       task: <span style={isDone ?{textDecoration:'line-through'}:{}}>{task}</span>
-      <input type="checkbox"  value={isDone? "on" : "off"} onChange={chekBoxHandler}></input>
+      <input type="checkbox" checked={isDone} onChange={chekBoxHandler}></input>
     </div>
   )
   return show;
