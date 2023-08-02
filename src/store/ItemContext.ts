@@ -2,15 +2,15 @@ import { createContext } from "react";
 import { Item } from "../types";
 
 type ItemReducerAction =
-  | {
-      type: "add";
-      item: Item;
+      {
+    type: "add";
+    item: Item;
     }
-  | {
-      type: "edit";
-      item: Item;
+    | {
+        type: "edit";
+        item: Item;
     }
-  | {
+    | {
       type: "delete";
       itemId: number;
     };
@@ -31,7 +31,7 @@ export const itemReducer = (items: Item[], action: ItemReducerAction) => {
     }
     case "delete": {
       return items.filter((it) => {
-        return it.id != action.itemId;
+        return it.id !== action.itemId;
       });
     }
     default:

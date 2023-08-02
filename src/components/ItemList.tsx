@@ -1,8 +1,6 @@
 import React, { useContext, useState } from "react";
 import { Item } from "../types";
 import { ItemsContext, ItemsReducerDispatchContext } from "../store/ItemContext";
-
-
 export function ItemInput() {
   const [text, setText] = useState("");
   const dispatch = useContext(ItemsReducerDispatchContext);
@@ -28,7 +26,6 @@ export function ItemInput() {
 type ItemViewProps = {
   item: Item;
 };
-
 function ItemView({ item: { id, message } }: ItemViewProps) {
   const [isEditing, setIsEditing] = useState(false);
   const dispatch = useContext(ItemsReducerDispatchContext);
@@ -75,7 +72,7 @@ function ItemView({ item: { id, message } }: ItemViewProps) {
 
 export function ItemList() {
   const items = useContext(ItemsContext);
-  const renderedItems = items.map(i => <ItemView item={i} />)
+  const renderedItems = items.map(i => <ItemView item={i} key={i.id}/>)
   return (
     <div>
       {renderedItems}
