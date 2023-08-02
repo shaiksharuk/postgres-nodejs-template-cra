@@ -11,7 +11,7 @@ export function ListInput() {
     setText(event.target.value);
   }
   const addListHandler = () => {
-    dispatch({ type: 'add', task: { id: maxId + 1, task:text } })
+    dispatch({ type: 'add', task: { id: maxId + 1, task:text, isDone: false } })
   }
   return (
     <div>
@@ -24,19 +24,19 @@ type ListViewProps = {
   task: Task;
 };
 
-function ListView({ task: { id, task } }: ListViewProps) {
-  const [isDone, setIsDone] = useState("on");
-  const chackBoxHandler:React.ChangeEventHandler<HTMLInputElement> = (event)=> {
-    const temp = event.target.value === "off" ? "on" : "off";
-    setIsDone(temp);
-    console.log(temp);
+function ListView({ task: { id, task,isDone } }: ListViewProps) {
+  
+  const dispatch = useContext(TasksReducerDispatchContext);
+  const chekBoxHandler:React.ChangeEventHandler<HTMLInputElement> = (event)=> {
+    dispatch({type: "toggledone", taskId: id})
   }
+
   const show = (
     <div>
       id: {id}
       <br/>
-      task: <span style={isDone === "off"?{textDecoration:'line-through'}:{}}>{task}</span>
-      <input type="checkbox"  value={isDone} onChange={chackBoxHandler}></input>
+      task: <span style={isDone ?{textDecoration:'line-through'}:{}}>{task}</span>
+      <input type="checkbox"  value={isDone? "on" : "off"} onChange={chekBoxHandler}></input>
     </div>
   )
   return show;

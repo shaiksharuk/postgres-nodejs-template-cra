@@ -2,10 +2,15 @@ import { createContext } from "react";
 import { Task } from "../types";
 
 type ListReducerAction = 
-    {
+      {
         type: "add";
         task: Task;
-    }
+    } 
+    | {
+        type: "toggledone";
+        taskId: number;
+    } 
+    
 
 export const listReducer = (tasks: Task[], action: ListReducerAction) => {
 
@@ -13,6 +18,17 @@ export const listReducer = (tasks: Task[], action: ListReducerAction) => {
         case "add": {
             return[...tasks, action.task]
         }
+        case "toggledone":
+            {
+                const idx = tasks.findIndex((t) => t.id === action.taskId );
+                const newTaskList = [...tasks];
+                newTaskList[idx] = {
+                    id: newTaskList[idx].id,
+                    task:newTaskList[idx].task,
+                    isDone: !newTaskList[idx].isDone,
+                };
+                return newTaskList;
+            }
         default:
             throw Error("Unknown action: " + action);
     }
